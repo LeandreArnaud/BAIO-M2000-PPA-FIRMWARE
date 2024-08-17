@@ -20,7 +20,9 @@ const bool debug = false;
 byte PPAvalues[2] = {255, 255};
 const byte registreLength = 8;
 int bombeNumber = 0;
+const byte maxBombeNumber = 18;
 int bombeMeters = 0;
+const byte maxBombeMeters = 28;
 
 bool mis = false;
 bool misp = false;
@@ -232,7 +234,7 @@ void writePPADigits(int bombe, int dist, bool mis, bool misp, bool mag, bool mag
 void incrementPPABombeNumber() {
   // if dcs bios is not connected
   if (!Serial.available()) {
-    if (bombeNumber == 20) {
+    if (bombeNumber == maxBombeNumber) {
       bombeNumber = 0;
     } else {
       bombeNumber++;
@@ -244,7 +246,7 @@ void decrementPPABombeNumber() {
   // if dcs bios is not connected
   if (!Serial.available()) {
     if (bombeNumber == 0) {
-      bombeNumber = 20;
+      bombeNumber = maxBombeNumber;
     } else {
       bombeNumber--;
     }
@@ -254,7 +256,7 @@ void decrementPPABombeNumber() {
 void incrementPPABombeMeters() {
   // if dcs bios is not connected
   if (!Serial.available()) {
-    if (bombeMeters == 20) {
+    if (bombeMeters == maxBombeMeters) {
       bombeMeters = 0;
     } else {
       bombeMeters++;
@@ -266,7 +268,7 @@ void decrementPPABombeMeters() {
   // if dcs bios is not connected
   if (!Serial.available()) {
     if (bombeMeters == 0) {
-      bombeMeters = 20;
+      bombeMeters = maxBombeMeters;
     } else {
       bombeMeters--;
     }
