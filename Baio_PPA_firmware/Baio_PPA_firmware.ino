@@ -93,6 +93,72 @@ void setup() {
 
 
 /********* DCS BIOS **********/
+// PAR
+void onPpaGunRocketPapChange(unsigned int newValue) {
+  par = newValue;
+}
+DcsBios::IntegerBuffer ppaGunRocketPapBuffer(0x72e4, 0x0100, 8, onPpaGunRocketPapChange);
+
+// MAG
+void onPpaMagicMisChange(unsigned int newValue) {
+  mag = newValue;
+}
+DcsBios::IntegerBuffer ppaMagicMisBuffer(0x72e0, 0x8000, 15, onPpaMagicMisChange);
+
+// MAGP
+void onPpaMagicPChange(unsigned int newValue) {
+  magp = newValue;
+}
+DcsBios::IntegerBuffer ppaMagicPBuffer(0x72e0, 0x4000, 14, onPpaMagicPChange);
+
+// MIS
+void onPpaS530MisChange(unsigned int newValue) {
+  mis = newValue;
+}
+DcsBios::IntegerBuffer ppaS530MisBuffer(0x72e0, 0x0800, 11, onPpaS530MisChange);
+
+// MISP
+void onPpaS530PChange(unsigned int newValue) {
+  misp = newValue;
+}
+DcsBios::IntegerBuffer ppaS530PBuffer(0x72e0, 0x0400, 10, onPpaS530PChange);
+
+
+// BOMBE NUMBER
+void onPpaQtyDispChange(char* newValue) {
+    // convert char to int
+    bombeNumber = (newValue[0] - '0') * 10 + (newValue[1] - '0');
+}
+DcsBios::StringBuffer<2> ppaQtyDispBuffer(0x7308, onPpaQtyDispChange);
+
+// BOMBE INTERVAL
+void onPpaIntDispChange(char* newValue) {
+    bombeMeters = (newValue[0] - '0') * 10 + (newValue[1] - '0');
+}
+DcsBios::StringBuffer<2> ppaIntDispBuffer(0x730a, onPpaIntDispChange);
+
+
+// CONSOLE BACKLIGHT
+void onDashPanelLgtKnobChange(unsigned int newValue) {
+    if (newValue <= 2000) {
+        analogWrite(PPAbacklightPin, 0);
+    } else {
+        analogWrite(PPAbacklightPin, newValue/256);    
+    }
+}
+DcsBios::IntegerBuffer dashPanelLgtKnobBuffer(0x729c, 0xffff, 0, onDashPanelLgtKnobChange);
+// DIGIT DISPLAY BACKLIGHT
+void onCautAdvLgtChange(unsigned int newValue) {
+  if (newValue <= 2000) {
+        matrix.setBrightness(0);
+        matrix.setDisplayState(false);
+    } else {
+        matrix.setBrightness(newValue/4096);
+        matrix.setDisplayState(true);
+    }
+    
+}
+DcsBios::IntegerBuffer cautAdvLgtBuffer(0x72a2, 0xffff, 0, onCautAdvLgtChange);
 
 
 
