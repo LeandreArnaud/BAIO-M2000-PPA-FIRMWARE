@@ -33,7 +33,7 @@ bool par = false;
 Joystick_ Joystick(
   0x05, // id of the gamepad, icrease in other pads to avoid conflict
   0x05, //Gamepad
-  14, // button
+  16, // button
   0, // hat
   false, // X
   false, // Y
@@ -162,6 +162,20 @@ void scanPPA() {
       digitalWrite(PPAclockPin, 1);
       delayMicroseconds(2);
     }
+  }
+
+  // RET position
+  if (!bitRead(PPAvalues[1], 0) && !bitRead(PPAvalues[1], 1)) {
+    Joystick.setButton(14, 1);
+  } else {
+    Joystick.setButton(14, 0);
+  }
+
+  // AUTO D/G position
+  if (!bitRead(PPAvalues[0], 1) && !bitRead(PPAvalues[0], 0)) {
+    Joystick.setButton(15, 1);
+  } else {
+    Joystick.setButton(15, 0);
   }
 }
 
