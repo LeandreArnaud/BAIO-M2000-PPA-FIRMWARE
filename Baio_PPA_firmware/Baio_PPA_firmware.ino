@@ -24,6 +24,8 @@ const byte maxBombeNumber = 18;
 int bombeMeters = 0;
 const byte maxBombeMeters = 28;
 
+bool isDCSinmission = false;
+
 bool mis = false;
 bool misp = false;
 bool mag = false;
@@ -160,6 +162,13 @@ void onCautAdvLgtChange(unsigned int newValue) {
 }
 DcsBios::IntegerBuffer cautAdvLgtBuffer(0x72a2, 0xffff, 0, onCautAdvLgtChange);
 
+void onAircraftNameChange(char* newValue) {
+  if(strcmp(newValue,""))
+    isDCSinmission = true;
+  else
+    isDCSinmission = false;
+}
+DcsBios::StringBuffer<24> AcftNameBuffer(0x0000, onAircraftNameChange);
 
 
 
@@ -172,7 +181,7 @@ void loop() {
   scanPPA();
   delay(10);
   // writePPADigits(bombeNumber, bombeMeters, mis, misp, mag, magp, par);
-  if (!Serial.available() && bitRead(PPAvalues[0], 7)) {
+  if (!isDCSinmission && bitRead(PPAvalues[0], 7)) {
     writePPADigits(88, 88, 1, 1, 1, 1, 1);
   } else {
     writePPADigits(bombeNumber, bombeMeters, mis, misp, mag, magp, par);
@@ -204,7 +213,7 @@ void scanPPA() {
         if (debug) Serial.println("----");
 
         // if dcs bios is not connected, change leds state
-        if (!Serial.available() && value) {
+        if (!isDCSinmission && value) {
           if (k == 0 && i == 2) {
             incrementPPABombeNumber();
           } else if (k == 0 && i == 3) {
@@ -313,7 +322,7 @@ void writePPADigits(int bombe, int dist, bool mis, bool misp, bool mag, bool mag
 
 void incrementPPABombeNumber() {
   // if dcs bios is not connected
-  if (!Serial.available()) {
+  if (!isDCSinmission) {
     if (bombeNumber == maxBombeNumber) {
       bombeNumber = 0;
     } else {
@@ -324,7 +333,7 @@ void incrementPPABombeNumber() {
 
 void decrementPPABombeNumber() {
   // if dcs bios is not connected
-  if (!Serial.available()) {
+  if (!isDCSinmission) {
     if (bombeNumber == 0) {
       bombeNumber = maxBombeNumber;
     } else {
@@ -335,7 +344,7 @@ void decrementPPABombeNumber() {
 
 void incrementPPABombeMeters() {
   // if dcs bios is not connected
-  if (!Serial.available()) {
+  if (!isDCSinmission) {
     if (bombeMeters == maxBombeMeters) {
       bombeMeters = 0;
     } else {
@@ -346,7 +355,7 @@ void incrementPPABombeMeters() {
 
 void decrementPPABombeMeters() {
   // if dcs bios is not connected
-  if (!Serial.available()) {
+  if (!isDCSinmission) {
     if (bombeMeters == 0) {
       bombeMeters = maxBombeMeters;
     } else {
@@ -354,5 +363,3 @@ void decrementPPABombeMeters() {
     }
   }
 }
-
-
