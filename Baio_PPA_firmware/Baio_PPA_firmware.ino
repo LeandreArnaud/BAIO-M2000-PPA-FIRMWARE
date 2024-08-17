@@ -62,7 +62,7 @@ void setup() {
   DcsBios::setup();
 
   matrix.begin(0x70);  // pass in the address 70 or 74
-  matrix.setBrightness(1);
+  matrix.setBrightness(5);
   matrix.setDisplayState(true);
 
   pinMode(PPAbacklightPin, OUTPUT);
@@ -81,7 +81,7 @@ void setup() {
     delay(100);
   }
   matrix.writeDisplay();
-  analogWrite(PPAbacklightPin, 200);
+  analogWrite(PPAbacklightPin, 255);
 
   delay(1000);
 }
