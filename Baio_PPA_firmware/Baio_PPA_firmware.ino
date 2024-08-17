@@ -212,8 +212,9 @@ void scanPPA() {
         if (debug) Serial.println(value);
         if (debug) Serial.println("----");
 
-        // if dcs bios is not connected, change leds state
-        if (!isDCSinmission && value) {
+        // change led state is dcs bios is not connected
+        // keep changing digit if dcs bios is connected to reduce the visible lag on the displays
+        if (value) {
           if (k == 0 && i == 2) {
             incrementPPABombeNumber();
           } else if (k == 0 && i == 3) {
@@ -222,7 +223,10 @@ void scanPPA() {
             incrementPPABombeMeters();
           } else if (k == 0 && i == 5) {
             decrementPPABombeMeters();
-          } else if (k == 1 && i == 4) {
+          }
+        }
+        if (!isDCSinmission && value) { 
+          if (k == 1 && i == 4) {
             magp = !magp;
             mag = !mag;
           } else if (k == 1 && i == 2) {
